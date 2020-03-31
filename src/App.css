@@ -1,3 +1,11 @@
+body {
+  background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url("./coronavirus.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: "Cairo", sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -5,6 +13,11 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.h1 {
+  color: rgb(181, 236, 222);
+  margin-top: 40px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -26,6 +39,59 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.left , .right {
+  float: left;
+  width: 50%;
+}
+
+.card1 {
+  width: 50%;
+  margin: 0 auto;
+  border: 5px solid rgb(98, 160, 221);
+  background-color: rgb(192, 217, 241);
+}
+
+.card1 h5 {
+  color: rgb(55, 116, 177);
+}
+
+.card1 h6 span {
+  color: rgb(114, 106, 106);
+}
+
+.right h2{
+  color: rgb(181, 236, 222);
+  text-align: left;
+  margin-top: 20px;
+  position: fixed;
+}
+
+
+
+.right p {
+  text-align: justify;
+  margin-top: 100px;
+  position: fixed;
+  color: rgb(168, 198, 228);
+  font-size: 22px;
+  width: 45%;
+  font-family: 'Cairo', sans-serif;
+}
+
+.right iframe {
+  margin-top: 46vh;
+  position: fixed;
+  pointer-events: none; 
+  cursor: default;
+  width: 150px;
+  border : none;
+}
+
+.right .note {
+  margin-top: 70vh;
+  font-weight: bolder;
 }
 
 @keyframes App-logo-spin {
