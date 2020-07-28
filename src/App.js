@@ -1,78 +1,77 @@
 import React, { Component } from "react";
-//import logo from "./logo.svg";
 import "./App.css";
+import ChartJS from './cioTiles/ChartJS';
+//import ChartJS2 from './cioTiles/ChartJS_2';
+//import ChartJS3 from './cioTiles/ChartJS_3';
+const axios = require("axios");
 
 class App extends Component {
   
   state = {
-    todos : [],
+    loading: true,
+    data : {
+      active: [],
+      //recoveries: [],
+      //deaths: []
+      dates: []
+    }
   }
   
   componentDidMount() {
-    this.interval = setInterval(fetch("https://coronavirus-19-api.herokuapp.com/countries",{
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
+    this.getData();
+  }
 
-    })
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
+  getData = async () => {
+    try {
+      const response = await axios.get("https://d03c3bgiw4.execute-api.ap-south-1.amazonaws.com/prod/api");
+      let data = response.data.body;
+      console.log(data[0].state.includes("Andhra"));
+      const active = []
+      const dates = []
+
+      let temp = []
+      let l = data.length;
+
+      for (let i=0; i<l; i++) {
+        if(data[i].District == "Maharashtra") {
+            active.push(data[i].ActiveCases);
+            dates.push(data[i].date);
+        }
+      }
+    
+      // console.log(temp);
+
+      // const recoveries = []
+      // const deaths = []
+      
+      //active.push(data[19].active_Cases,data[29].active_Cases,data[7].active_Cases,data[14].active_Cases,data[0].active_Cases,data[9].active_Cases)
+      //recoveries.push(data[19].recoveries,data[29].recoveries,data[7].recoveries,data[14].recoveries,data[0].recoveries,data[9].recoveries)
+      //deaths.push(data[19].deaths,data[29].deaths,data[7].deaths,data[14].deaths,data[0].deaths,data[9].deaths)
+      
       this.setState({
-        todos : response
-      })
+        loading: false,
+        data: {
+          active,
+          //recoveries,
+          //deaths
+          dates
+        }
     })
-    .catch(err => {
-      console.log(err);
-    }),60000);
- }
+      console.log(active)
+      console.log(dates)
+      // console.log(recoveries)
+      // console.log(deaths)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render(){
     return (
-      <div className="container-fluid mt-5">
-        <div className="col-xs-12 col-lg-6 left">
-
-          <h2 className="text-center h1 mt-5">Novel Corona (COVID-19) Tracker (Countrywise)</h2>
-          {this.state.todos.map((todo) => (
-          <div className="card mt-4 card1" id={todo.country}>
-            <div className="card-body">
-              <h5 className="card-title">{todo.country}</h5>
-              <h6 className="card-subtitle mb-2 text-muted">
-               
-                <span>
-                  Total Cases : {todo.cases}
-                </span>
-                <br />               
-                <span>
-                  Recovered : {todo.recovered}
-                </span>
-                <br />
-                <span>
-                  Deaths : {todo.deaths}
-                </span>
-                <br />
-                <span>
-                  Active Cases : {todo.active}
-                </span>                       
-              </h6>
-            </div>
-          </div>
-          ))}
-        </div>
-        <div className="col-xs-12 col-lg-6 right mt-5">
-            <h2>What is Corona Virus ?</h2>
-            <p>Coronavirus disease (COVID-19) is an infectious disease caused by a new virus.
-The disease causes respiratory illness (like the flu) with symptoms such as a cough, fever, and in more severe cases, difficulty breathing.You can protect yourself by washing your hands frequently, avoiding touching your face, and avoiding close contact (1 meter or 3 feet) with people who are unwell.</p>
-{/* 
-<div style={{width:"100%" , 
-  height:0,
-  paddingBottom:"100%",
-  position:relative}}>
-  <iframe src="https://giphy.com/embed/YPhuwt9pV2XLM2HIq4"  style = { position : absolute , frameBorder : 0,width:"100%", height:"100%"} class="giphy-embed" allowFullScreen></iframe>
-</div> */}
-<iframe src="https://giphy.com/embed/YPhuwt9pV2XLM2HIq4"  class="giphy-embed" allowFullScreen></iframe>
-<p className="note">( Scroll Down to see all the countries affected )</p>
-        </div>
+      <div className="container">
+        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS active={this.state.data.active} dates={this.state.data.dates}/>}
+        {/*   {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS2 recoveries={this.state.data.recoveries}/>}
+        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS3 deaths={this.state.data.deaths}/>} */}
       </div>
   );
   }
