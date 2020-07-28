@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./ChartJS.css";
+// import "./ChartJS.css";
 
 import { Bar, Line } from 'react-chartjs-2';
 
@@ -16,9 +16,9 @@ class ChartJS extends Component {
                     fill: false,
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: 'rgba(75,192,192,1)',
-                    pointRadius: 10,
-                    pointHitRadius: 10,
-                    pointHoverRadius: 10,
+                    pointRadius: 5,
+                    pointHitRadius: 5,
+                    pointHoverRadius: 5,
                     lineTension: 0.1,
 
                     data:[
@@ -68,25 +68,25 @@ class ChartJS extends Component {
             <>
                 <Line
                     data={this.state.data}
-                    width={100}
-                    height={50}
+                    // width={100}
+                    // height={50}
                     options={{ 
                         scales: {
                             legend: {
                                 labels: {
                                     fontColor: "white",
-                                    fontSize: 18
+                                    //fontSize: 18
                                 }
                             },
                             xAxes: [{
                                 ticks: {
-                                    fontSize: 25,
+                                    //fontSize: 15,
                                     fontColor: "#ddd",
                                 }
                             }],
                             yAxes: [{
                                 ticks: {
-                                    fontSize: 25,
+                                    //fontSize: 15,
                                     fontColor: "#ddd",
                                 }
                             }],
@@ -94,13 +94,13 @@ class ChartJS extends Component {
                         },
                         title: {
                             display: true,
-                            fontSize: 32,
+                            //fontSize: 25,
                             fontColor: "#ddd",
-                            text: 'Active Cases In Last 10 Days (Maharashtra)'
+                            text: 'Active Cases In Last 10 Days'
                         },
                         tooltips: {
-                            titleFontSize: 25,
-                            bodyFontSize: 25,
+                            titleFontSize: 15,
+                            bodyFontSize: 15,
                             xPadding: 20,
                         }
                      }}
