@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
-import ChartJS from './cioTiles/ChartJS';
-//import ChartJS2 from './cioTiles/ChartJS_2';
-//import ChartJS3 from './cioTiles/ChartJS_3';
+//import CasesGraph from './cioGraphs/casesGraph';
+import ActiveGraph from './cioGraphs/activeGraph';
+import RecoveriesGraph from './cioGraphs/recoveriesGraph';
+import DeathsGraph from './cioGraphs/deathsGraph';
+
 const axios = require("axios");
 
 class App extends Component {
@@ -10,9 +12,11 @@ class App extends Component {
   state = {
     loading: true,
     data : {
+      StateName: "Maharashtra",
+      cases: [],
       active: [],
-      //recoveries: [],
-      //deaths: []
+      recoveries: [],
+      deaths: [],
       dates: []
     }
   }
@@ -22,59 +26,120 @@ class App extends Component {
   }
 
   getData = async () => {
-    try {
-      const response = await axios.get("https://d03c3bgiw4.execute-api.ap-south-1.amazonaws.com/prod/api");
-      let data = response.data.body;
-      console.log(data[0].state.includes("Andhra"));
-      const active = []
-      const dates = []
+      
+    let cachedData = sessionStorage.getItem("CovidData")
+    
+    if(cachedData === null) {
+      try {
+        await axios.all([
+          axios.get("https://0vuczorhbk.execute-api.ap-south-1.amazonaws.com/prod/api"),
+          axios.get("https://d03c3bgiw4.execute-api.ap-south-1.amazonaws.com/prod/api"),
+          axios.get("https://91vcnj2z16.execute-api.ap-south-1.amazonaws.com/prod/api"),
+          axios.get("https://8z12wjcl8h.execute-api.ap-south-1.amazonaws.com/prod/api")
+        ]).then(axios.spread((...responses) => {
+          var responseOne = responses[0]
+          var responseTwo = responses[1]
+          var responseThree = responses[2]
+          var responseFour = responses[3]
 
-      let temp = []
-      let l = data.length;
+          console.log(responseOne.data.body)
 
-      for (let i=0; i<l; i++) {
-        if(data[i].District == "Maharashtra") {
-            active.push(data[i].ActiveCases);
-            dates.push(data[i].date);
+          let data1 = responseOne.data.body;
+          let data2 = responseTwo.data.body;
+          let data3 = responseThree.data.body;
+          let data4 = responseFour.data.body;
+
+          sessionStorage.setItem("CovidData", JSON.stringify([[...data1],[...data2],[...data3],[...data4]]));
+          this.getSessionData();
+
+          })).catch(error => {
+            // react on errors
+            console.error(error);
+          })     
+      } catch (error) {
+        console.error(error);
+      }
+     }
+     else {
+       this.getSessionData();
+     }
+  }
+
+  getSessionData = () => {
+    let data = JSON.parse(sessionStorage.getItem("CovidData"))
+    
+    console.log(data)
+    const cases = []
+    const active = []
+    const recoveries = []
+    const deaths = []
+    const dates = []
+
+    let temp = []
+    let l1 = data[0].length;
+    let l2 = data[1].length;
+
+    console.log(this.state.data.StateName)
+
+    
+      for (let i=0; i<l1; i++) {
+        if(data[0][i].District === this.state.data.StateName) {
+            cases.push(data[0][i].TotalCases);
+            dates.push(data[0][i].date);
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data[1][i].District === this.state.data.StateName) {
+            active.push(data[1][i].ActiveCases);
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data[2][i].District === this.state.data.StateName) {
+            recoveries.push(data[2][i].Recoveries);
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data[3][i].District === this.state.data.StateName) {
+            deaths.push(data[3][i].Deaths);
         }
       }
     
-      // console.log(temp);
-
-      // const recoveries = []
-      // const deaths = []
-      
-      //active.push(data[19].active_Cases,data[29].active_Cases,data[7].active_Cases,data[14].active_Cases,data[0].active_Cases,data[9].active_Cases)
-      //recoveries.push(data[19].recoveries,data[29].recoveries,data[7].recoveries,data[14].recoveries,data[0].recoveries,data[9].recoveries)
-      //deaths.push(data[19].deaths,data[29].deaths,data[7].deaths,data[14].deaths,data[0].deaths,data[9].deaths)
-      
-      this.setState({
-        loading: false,
-        data: {
-          active,
-          //recoveries,
-          //deaths
-          dates
-        }
+   
+  
+    this.setState({
+      loading: false,
+      data: {
+        StateName: "Maharashtra",
+        active,
+        recoveries,
+        deaths,
+        dates
+      }
     })
-      console.log(active)
-      console.log(dates)
-      // console.log(recoveries)
-      // console.log(deaths)
-    } catch (error) {
-      console.error(error);
-    }
+    console.log(cases)
+    console.log(active)
+    console.log(recoveries)
+    console.log(deaths)
   }
 
   render(){
     return (
       <div className="container">
-        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS active={this.state.data.active} dates={this.state.data.dates}/>}
-        {/*   {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS2 recoveries={this.state.data.recoveries}/>}
-        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ChartJS3 deaths={this.state.data.deaths}/>} */}
+        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ActiveGraph active={this.state.data.active} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        {this.state.loading ?  null : <RecoveriesGraph active={this.state.data.recoveries} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        {this.state.loading ?  null : <DeathsGraph active={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+      
+        {/* <CasesGraph active={this.state.data.cases} dates={this.state.data.dates} StateName={this.state.data.StateName}/> */}
+        
       </div>
   );
   }
 }
 
 export default App;
+
+
+//axios.get("https://0vuczorhbk.execute-api.ap-south-1.amazonaws.com/prod/api") TOTAL
+//axios.get("https://d03c3bgiw4.execute-api.ap-south-1.amazonaws.com/prod/api") ACTIVE
+//axios.get("https://91vcnj2z16.execute-api.ap-south-1.amazonaws.com/prod/api") RECOVERED
+//axios.get("https://8z12wjcl8h.execute-api.ap-south-1.amazonaws.com/prod/api") DEATHS

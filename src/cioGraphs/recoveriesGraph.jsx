@@ -1,49 +1,38 @@
 import React, { Component } from 'react';
 // import "./ChartJS.css";
 
-import { Bar, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 
-class ChartJS extends Component {
+class ActiveGraph extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            StateName: "",
             data: {
-                labels: ['Maharashtra', 'Tamil Nadu', 'Delhi', 'Karnataka', 'Andhra Pradesh', 'Gujarat'],
+                labels: [],
                 datasets:[
                   {
-                    label:'Active Cases',
+                    label:'Recovered Cases',
                     fill: false,
                     backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderColor: 'rgba(75,192,192,1)',
+                    borderColor: '#3c7c76',
                     pointRadius: 5,
                     pointHitRadius: 5,
                     pointHoverRadius: 5,
                     lineTension: 0.1,
-
-                    data:[
-                        24000,
-                        34563,
-                        52000,
-                        40132,
-                        26433,
-                        12000,
-                        52000,
-                        40132,
-                        26433,
-                        12000
-                    ],
+                    data:[],
                     backgroundColor: [
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5',
-                        '#1371A5'
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76',
+                        '#3c7c76'
                     ]
                   }
                 ]
@@ -57,8 +46,9 @@ class ChartJS extends Component {
         let dates = [...this.props.dates]
         data.datasets[0].data = [...active]
         data.labels = [...dates]
-        //console.log(data)
+        
         this.setState({
+            StateName: this.props.StateName,
             data
         })
     }
@@ -94,9 +84,9 @@ class ChartJS extends Component {
                         },
                         title: {
                             display: true,
-                            //fontSize: 25,
+                            fontSize: 15,
                             fontColor: "#ddd",
-                            text: 'Active Cases In Last 10 Days'
+                            text: `Recovered Cases In Last 10 Days - ${this.state.StateName}`
                         },
                         tooltips: {
                             titleFontSize: 15,
@@ -110,4 +100,4 @@ class ChartJS extends Component {
     }
 }
  
-export default ChartJS;
+export default ActiveGraph;
