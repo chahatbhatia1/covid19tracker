@@ -8,7 +8,6 @@ class ActiveGraph extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            StateName: "",
             data: {
                 labels: [],
                 datasets:[
@@ -42,13 +41,12 @@ class ActiveGraph extends Component {
 
     componentDidMount() {
         let data = Object.assign({},this.state.data)
-        let active = [...this.props.active]
+        let recoveries = [...this.props.recoveries]
         let dates = [...this.props.dates]
-        data.datasets[0].data = [...active]
+        data.datasets[0].data = [...recoveries]
         data.labels = [...dates]
         
         this.setState({
-            StateName: this.props.StateName,
             data
         })
     }
@@ -86,7 +84,7 @@ class ActiveGraph extends Component {
                             display: true,
                             fontSize: 15,
                             fontColor: "#ddd",
-                            text: `Recovered Cases In Last 10 Days - ${this.state.StateName}`
+                            text: `Recovered Cases In Last 10 Days - ${this.props.StateName}`
                         },
                         tooltips: {
                             titleFontSize: 15,

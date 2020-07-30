@@ -8,12 +8,11 @@ class ActiveGraph extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            StateName: "",
             data: {
                 labels: [],
                 datasets:[
                   {
-                    label:'Death Cases',
+                    label:'Deaths',
                     fill: false,
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: '#b74b60',
@@ -42,13 +41,12 @@ class ActiveGraph extends Component {
 
     componentDidMount() {
         let data = Object.assign({},this.state.data)
-        let active = [...this.props.active]
+        let deaths = [...this.props.deaths]
         let dates = [...this.props.dates]
-        data.datasets[0].data = [...active]
+        data.datasets[0].data = [...deaths]
         data.labels = [...dates]
         
         this.setState({
-            StateName: this.props.StateName,
             data
         })
     }
@@ -86,7 +84,7 @@ class ActiveGraph extends Component {
                             display: true,
                             fontSize: 15,
                             fontColor: "#ddd",
-                            text: `Death Cases In Last 10 Days - ${this.state.StateName}`
+                            text: `Deaths In Last 10 Days - ${this.props.StateName}`
                         },
                         tooltips: {
                             titleFontSize: 15,
