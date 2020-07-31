@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import "./cioGraphs/ChartJS.css";
-import CasesGraph from './cioGraphs/casesGraph';
-import ActiveGraph from './cioGraphs/activeGraph';
-import RecoveriesGraph from './cioGraphs/recoveriesGraph';
-import DeathsGraph from './cioGraphs/deathsGraph';
+import BarGraph from "./cioGraphs/BarGraph";
+
+//import CasesGraph from './cioGraphs/casesGraph';
+//import ActiveGraph from './cioGraphs/activeGraph';
+//import RecoveriesGraph from './cioGraphs/recoveriesGraph';
+//import DeathsGraph from './cioGraphs/deathsGraph';
 
 const axios = require("axios");
 
@@ -84,7 +86,7 @@ class App extends Component {
     const deaths = []
     const dates = []
 
-    let temp = []
+    //let temp = []
     let l1 = data[0].length;
     let l2 = data[1].length;
 
@@ -136,10 +138,10 @@ class App extends Component {
   render(){
     return (
       <div className="container">
-        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <ActiveGraph active={this.state.data.active} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
-        {this.state.loading ?  null : <RecoveriesGraph recoveries={this.state.data.recoveries} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
-        {this.state.loading ?  null : <DeathsGraph deaths={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
-        {this.state.loading ?  null : <CasesGraph cases={this.state.data.cases} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <BarGraph active={this.state.data.active} recoveries={this.state.data.recoveries} deaths={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        {/* {this.state.loading ?  null : <RecoveriesGraph recoveries={this.state.data.recoveries} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        {this.state.loading ?  null : <DeathsGraph deaths={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> } */}
+        {/* {this.state.loading ?  null : <CasesGraph cases={this.state.data.cases} dates={this.state.data.dates} StateName={this.state.data.StateName}/> } */}
       </div>
   );
   }
