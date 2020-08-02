@@ -30,6 +30,7 @@ class App extends Component {
 
   getData =  () => {
       
+    //localStorage.setItem("CovidData", JSON.stringify([]))
     let cachedData = localStorage.getItem("CovidData")
     
     if(cachedData === null) {
@@ -56,16 +57,93 @@ class App extends Component {
         var responseThree = responses[2]
         var responseFour = responses[3]
 
-        console.log(responseOne.data.body)
+        // console.log(responseOne.data.body)
+        // console.log(responseTwo.data.body)
+        // console.log(responseThree.data.body)
+        // console.log(responseFour.data.body)
 
         let data1 = responseOne.data.body;
         let data2 = responseTwo.data.body;
         let data3 = responseThree.data.body;
         let data4 = responseFour.data.body;
 
-        localStorage.setItem("CovidData", JSON.stringify([[...data1],[...data2],[...data3],[...data4]]));
+
+    let cases = []
+    let active = []
+    let recoveries = []
+    let deaths = []
+    let dates = []
+
+    //let temp = []
+    let l1 = data1.length;
+    let l2 = data2.length;
+
+    console.log(l1,l2,this.state.data.StateName)
+
+    
+      for (let i=0; i<l1; i++) {
+        if(data1[i].District === this.state.data.StateName) {
+            cases.push(data1[i].TotalCase);
+            dates.push(data1[i].date);
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data2[i].District === this.state.data.StateName) {
+            active.push(data2[i].ActiveCases);
+            
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data3[i].District === this.state.data.StateName) {
+            recoveries.push(data3[i].Recoveries);
+        }
+      }
+      for (let i=0; i<l2; i++) {
+        if(data4[i].District === this.state.data.StateName) {
+            deaths.push(data4[i].Deaths);
+        }
+      }
+
+      const L = active.length;
+      let temp = 0
+      console.log(cases)
+      cases = []
+
+      for (let i=0; i<L; i++) {
+        temp = parseInt(active[i]) + parseInt(recoveries[i]) + parseInt(deaths[i])
+        cases.push(temp.toString())
+        console.log(cases[i])
+    }
+      // For Loop Calculation For total cases 
+        /*
+               for (let i=0; i<L; i++) {
+             console.log(parseInt(active[i]) + parseInt(recoveries[i]) + parseInt(deaths[i]))
+         }
+
+
+        */
+
+
+      //,active,recoveries,deaths)
+
+        localStorage.setItem("CovidData", JSON.stringify([[...cases],[...active],[...recoveries],[...deaths],[...dates]]));
 
         this.getSessionData();
+
+
+
+        this.setState({
+          loading: false,
+          data: {
+            StateName: "Maharashtra",
+            cases,
+            active,
+            recoveries,
+            deaths,
+            dates 
+          }
+        })
+        console.log(this.state)
         })).catch(error => {
           // react on errors
           console.error(error);
@@ -78,57 +156,21 @@ class App extends Component {
 
   getSessionData = () => {
     let data = JSON.parse(localStorage.getItem("CovidData"))
-    
-    console.log(data)
-    const cases = []
-    const active = []
-    const recoveries = []
-    const deaths = []
-    const dates = []
 
-    //let temp = []
-    let l1 = data[0].length;
-    let l2 = data[1].length;
-
-    //console.log(l1,l2,this.state.data.StateName)
-
+    console.log(data[0])
     
-      for (let i=0; i<l1; i++) {
-        if(data[0][i].District === this.state.data.StateName) {
-            cases.push(data[0][i].TotalCase);
-            dates.push(data[0][i].date);
-        }
-      }
-      for (let i=0; i<l2; i++) {
-        if(data[1][i].District === this.state.data.StateName) {
-            active.push(data[1][i].ActiveCases);
-            
-        }
-      }
-      for (let i=0; i<l2; i++) {
-        if(data[2][i].District === this.state.data.StateName) {
-            recoveries.push(data[2][i].Recoveries);
-        }
-      }
-      for (let i=0; i<l2; i++) {
-        if(data[3][i].District === this.state.data.StateName) {
-            deaths.push(data[3][i].Deaths);
-        }
-      }
-    
-   
-  
     this.setState({
       loading: false,
       data: {
         StateName: "Maharashtra",
-        cases,
-        active,
-        recoveries,
-        deaths,
-        dates
+        cases: data[0],
+        active: data[1],
+        recoveries: data[2],
+        deaths: data[3],
+        dates: data[4]
       }
     })
+    //console.log(this.state)
     // console.log(cases)
     // console.log(active)
     // console.log(recoveries)
@@ -138,7 +180,14 @@ class App extends Component {
   render(){
     return (
       <div className="container">
-        {this.state.loading ?  <h1 className="loader">Loading...</h1> : <BarGraph active={this.state.data.active} recoveries={this.state.data.recoveries} deaths={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
+        { this.state.loading ?  <h1 className="loader">Loading...</h1> : <BarGraph 
+          cases={this.state.data.cases} 
+          active={this.state.data.active} 
+          recoveries={this.state.data.recoveries} 
+          deaths={this.state.data.deaths} 
+          dates={this.state.data.dates} 
+          StateName={this.state.data.StateName}
+        /> }
         {/* {this.state.loading ?  null : <RecoveriesGraph recoveries={this.state.data.recoveries} dates={this.state.data.dates} StateName={this.state.data.StateName}/> }
         {this.state.loading ?  null : <DeathsGraph deaths={this.state.data.deaths} dates={this.state.data.dates} StateName={this.state.data.StateName}/> } */}
         {/* {this.state.loading ?  null : <CasesGraph cases={this.state.data.cases} dates={this.state.data.dates} StateName={this.state.data.StateName}/> } */}

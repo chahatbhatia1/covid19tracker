@@ -7,12 +7,14 @@ class BarGraph extends Component {
         super(props);
         this.state = { 
             data: {
-                labels: [],
+                labels: ['cg','ccdd','cccc'],
                 datasets:[
+               
                   {
                     label:'Deaths',
                     fill: false,
-                    data:[],
+                    //type: 'bar',
+                    data:[10,20,30],
                     backgroundColor: "#b74b60",
 					hoverBackgroundColor: "#b74b60",
 					hoverBorderWidth: 2,
@@ -21,7 +23,7 @@ class BarGraph extends Component {
                   {
                     label:'Recovered',
                     fill: false,
-                    data:[],
+                    data:[10,20,30],
                     backgroundColor: "#3c7c76",
 					hoverBackgroundColor: "#3c7c76",
 					hoverBorderWidth: 2,
@@ -30,11 +32,27 @@ class BarGraph extends Component {
                   {
                     label:'Active',
                     fill: false,
-                    data:[],
+                    data:[10,20,30],
                     backgroundColor: "#571B59",
 					hoverBackgroundColor: "#571B59",
 					hoverBorderWidth: 2,
 					hoverBorderColor: 'lightgrey'
+                  },
+                  { 
+                    label: 'Total',
+                    type:'line',
+                    //
+                    data: [560000, 660000, 600000, 460000, 600000, 360000, 600000,600000, 360000, 600000],
+                    fill: false,
+                    borderColor: '#EC932F',
+                    backgroundColor: '#EC932F',
+                    pointBorderColor: '#EC932F',
+                    pointBackgroundColor: '#EC932F',
+                    pointHoverBackgroundColor: '#EC932F',
+                    pointHoverBorderColor: '#EC932F',
+                    pointRadius: 6,
+                    pointHitRadius: 6,
+                    //yAxisID: 'y-axis-2'
                   }
                 ]
               }
@@ -43,10 +61,14 @@ class BarGraph extends Component {
 
     componentDidMount() {
         let data = Object.assign({},this.state.data)
-        let active = [...this.props.active]
-        let recoveries = [...this.props.recoveries]
-        let deaths = [...this.props.deaths]
-        let dates = [...this.props.dates]
+
+        let cases = [...this.props.cases]
+         let active = [...this.props.active]
+         let recoveries = [...this.props.recoveries]
+         let deaths = [...this.props.deaths]
+         let dates = [...this.props.dates]
+
+        data.datasets[3].data = [...cases]
         data.datasets[2].data = [...active]
         data.datasets[1].data = [...recoveries]
         data.datasets[0].data = [...deaths]
@@ -63,7 +85,11 @@ class BarGraph extends Component {
                 <Bar
                     data={this.state.data}
                     options={{ 
-                        responsive: true,
+                        //responsive: true,
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            mode: 'label'
+                          },
                         scales: {
                             legend: {
                                 labels: {
@@ -79,17 +105,19 @@ class BarGraph extends Component {
                                 },
                                 stacked: true
                             }],
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "#ddd",
-                                    startAtZero: true,
-                                    min: 0,
-                                },
-                                gridLines: {
-                                    zeroLineColor: 'rgba(255, 255, 255, 1)'
-                                },
-                                stacked: true
-                            }],   
+                            yAxes: [                                  
+                                    {
+                                    ticks: {
+                                        fontColor: "#ddd",
+                                        startAtZero: true,
+                                        min: 0,
+                                        stepSize: 100000
+                                    },
+                                    gridLines: {
+                                        zeroLineColor: 'rgba(255, 255, 255, 1)'
+                                    },
+                                    stacked: true
+                                }],   
                         },
                         title: {
                             display: true,
@@ -98,8 +126,8 @@ class BarGraph extends Component {
                             text: `${this.props.StateName} - Last 10 Days Trend Of Covid-19 Cases`
                         },
                         tooltips: {
-                            titleFontSize: 10,
-                            bodyFontSize: 10,
+                            titleFontSize: 12,
+                            bodyFontSize: 12,
                             xPadding: 20,
                         }
                      }}

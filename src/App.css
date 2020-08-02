@@ -15,4 +15,15 @@ body {
 .container {
   max-width: 720px;
   margin: 20px auto;
+  height: 500px;
+}
+
+canvas {
+  height: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    height: 400px;
+  }
 }
