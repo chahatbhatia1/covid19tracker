@@ -132,18 +132,17 @@ class App extends Component {
 
 
 
-        this.setState({
-          loading: false,
-          data: {
-            StateName: "Maharashtra",
-            cases,
-            active,
-            recoveries,
-            deaths,
-            dates 
-          }
-        })
-        console.log(this.state)
+        // this.setState({
+        //   loading: false,
+        //   data: {
+        //     StateName: "Maharashtra",
+        //     cases,
+        //     active,
+        //     recoveries,
+        //     deaths,
+        //     dates 
+        //   }
+        // })
         })).catch(error => {
           // react on errors
           console.error(error);
