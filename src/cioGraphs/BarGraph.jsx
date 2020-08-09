@@ -7,6 +7,7 @@ class BarGraph extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            stateName: "",
             data: {
                 labels: ['cg','ccdd','cccc'],
                 datasets:[
@@ -64,13 +65,97 @@ class BarGraph extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props)
+        let currentState = this.props.match.params.stateId
+        console.log(currentState)
+        let states = {
+            "andamanAndNicobarIslands": "Andaman & Nicobar Islands",
+            "maharashtra": "Maharashtra",
+            "rajasthan": "Rajasthan",
+            "delhi": "Delhi",
+            "andhraPradesh": "Andhra Pradesh",  //TODO
+            "arunachalPradesh": "Arunachal Pradesh",
+            "assam": "Assam",
+            "bihar": "Bihar",
+            "chattisgarh": "Chattisgarh",
+            "goa": "Goa",
+            "gujarat": "Gujarat",
+            "haryana": "Haryana",
+            "himachalPradesh": "Himachal Pradesh",
+            "jharkhand": "Jharkhand",
+            "kerela": "Kerela",                 //TODO
+            "karnataka": "Karnataka",
+            "madhyaPradesh": "Madhya Pradesh",
+            "manipur": "Manipur",
+            "meghalaya": "Meghalaya",
+            "mizoram": "Mizoram",
+            "nagaland": "Nagaland",
+            "punjab": "Punjab",
+            "odisha": "Odisha",
+            "sikkim": "Sikkim",
+            "tamilNadu": "Tamil Nadu",
+            "telangana": "Telangana",
+            "tripura": "Tripura",
+            "uttarPradesh": "Uttar Pradesh",
+            "uttarakhand": "Uttarakhand",
+            "westBengal": "West Bengal"
+        }
         let data = Object.assign({},this.state.data)
 
-        let cases = [...this.props.cases]
-         let active = [...this.props.active]
-         let recoveries = [...this.props.recoveries]
-         let deaths = [...this.props.deaths]
-         let dates = [...this.props.dates]
+        let data1 = [...this.props.cases]
+        let data2 = [...this.props.active]
+        let data3 = [...this.props.recoveries]
+        let data4 = [...this.props.deaths]
+
+
+        //:TODO handling params logic
+
+        let l1 = data1.length
+        let l2 = data2.length
+
+        console.log(l1,l2)
+
+        let cases = []
+        let active = []
+        let recoveries = []
+        let deaths = []
+        let dates = []
+
+        let stateName = states[currentState]
+
+          for (let i=0; i<l1; i++) {
+            if(data1[i].District === stateName) {
+                cases.push(data1[i].TotalCase);
+                dates.push(data1[i].date);
+            }
+          }
+          for (let i=0; i<l2; i++) {
+            if(data2[i].District === stateName) {
+                active.push(data2[i].ActiveCases);
+                
+            }
+          }
+          for (let i=0; i<l2; i++) {
+            if(data3[i].District === stateName) {
+                recoveries.push(data3[i].Recoveries);
+            }
+          }
+          for (let i=0; i<l2; i++) {
+            if(data4[i].District === stateName) {
+                deaths.push(data4[i].Deaths);
+            }
+          }
+
+          const L = active.length;
+          let temp = 0
+          cases = []
+
+          for (let i=0; i<L; i++) {
+            temp = parseInt(active[i]) + parseInt(recoveries[i]) + parseInt(deaths[i])
+            cases.push(temp.toString())
+        }
+
+        console.log(active,recoveries,deaths,cases)
 
         data.datasets[0].data = [...cases]
         data.datasets[3].data = [...active]
@@ -79,6 +164,7 @@ class BarGraph extends Component {
         data.labels = [...dates]
         
         this.setState({
+            stateName: states[currentState],
             data
         })
     }
@@ -119,7 +205,7 @@ class BarGraph extends Component {
                             display: true,
                             fontSize: 15,
                             fontColor: "#ddd",
-                            text: `${this.props.StateName} - Last 10 Days Trend Of Covid-19 Cases`
+                            text: `${this.state.stateName} - Last 10 Days Trend Of Covid-19 Cases`
                         },
                         tooltips: {
                             titleFontSize: 12,
