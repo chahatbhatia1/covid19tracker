@@ -3,7 +3,7 @@ import "./App.css";
 import "./cioGraphs/ChartJS.css";
 import BarGraph from "./cioGraphs/BarGraph";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 
 const axios = require("axios");
 

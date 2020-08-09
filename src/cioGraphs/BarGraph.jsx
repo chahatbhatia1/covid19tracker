@@ -65,7 +65,7 @@ class BarGraph extends Component {
     }
 
     componentDidMount() {
-        //console.log(this.props)
+        console.log(this.props)
         let currentState = this.props.match.params.stateId
         //console.log(currentState)
         let states = {
