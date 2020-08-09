@@ -66,10 +66,12 @@ class App extends Component {
 
   render(){
     return (
-      <Router>
+      <Router 
+      //basename={window.location.pathname || " "}
+      >
         <div className="container">
           { this.state.loading ?  <h1 className="loader">Loading...</h1> : 
-              <Route path="/:stateId" 
+              <Route path="/:repoName/:stateId" 
                 render={ (props) => <BarGraph 
                 {...props}
                 cases={this.state.data.cases} 

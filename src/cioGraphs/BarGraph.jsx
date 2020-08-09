@@ -65,9 +65,9 @@ class BarGraph extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        //console.log(this.props)
         let currentState = this.props.match.params.stateId
-        console.log(currentState)
+        //console.log(currentState)
         let states = {
             "andamanAndNicobarIslands": "Andaman & Nicobar Islands",
             "maharashtra": "Maharashtra",
@@ -83,7 +83,7 @@ class BarGraph extends Component {
             "haryana": "Haryana",
             "himachalPradesh": "Himachal Pradesh",
             "jharkhand": "Jharkhand",
-            "kerela": "Kerela",                 //TODO
+            "kerala": "Kerala",                 
             "karnataka": "Karnataka",
             "madhyaPradesh": "Madhya Pradesh",
             "manipur": "Manipur",
@@ -113,7 +113,7 @@ class BarGraph extends Component {
         let l1 = data1.length
         let l2 = data2.length
 
-        console.log(l1,l2)
+        //console.log(l1,l2)
 
         let cases = []
         let active = []
@@ -129,6 +129,9 @@ class BarGraph extends Component {
                 dates.push(data1[i].date);
             }
           }
+
+          //console.log(cases)
+
           for (let i=0; i<l2; i++) {
             if(data2[i].District === stateName) {
                 active.push(data2[i].ActiveCases);
