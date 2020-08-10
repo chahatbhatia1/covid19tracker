@@ -16,7 +16,7 @@ class BarGraph extends Component {
                         type:'line',
                         position: 'right',
                         //
-                        data: [560000, 660000, 600000, 460000, 600000, 360000, 600000,600000, 360000, 600000],
+                        data: [],
                         fill: false,
                         borderColor: '#EC932F',
                         backgroundColor: '#EC932F',
@@ -32,7 +32,7 @@ class BarGraph extends Component {
                     label:'Deaths',
                     fill: false,
                     type: 'bar',
-                    data:[10,20,30],
+                    data:[],
                     backgroundColor: "#b74b60",
 					hoverBackgroundColor: "#b74b60",
 					hoverBorderWidth: 2,
@@ -42,7 +42,7 @@ class BarGraph extends Component {
                     label:'Recovered',
                     fill: false,
                     type: 'bar',
-                    data:[10,20,30],
+                    data:[],
                     backgroundColor: "#3c7c76",
 					hoverBackgroundColor: "#3c7c76",
 					hoverBorderWidth: 2,
@@ -52,7 +52,7 @@ class BarGraph extends Component {
                     label:'Active',
                     fill: false,
                     type: 'bar',
-                    data:[10,20,30],
+                    data:[],
                     backgroundColor: "#571B59",
 					hoverBackgroundColor: "#571B59",
 					hoverBorderWidth: 2,
@@ -122,6 +122,7 @@ class BarGraph extends Component {
         let dates = []
 
         let stateName = states[currentState]
+        //stateName = "Maharashtra"
 
           for (let i=0; i<l1; i++) {
             if(data1[i].District === stateName) {
@@ -158,7 +159,9 @@ class BarGraph extends Component {
             cases.push(temp.toString())
         }
 
-        console.log(active,recoveries,deaths,cases)
+        console.log(dates,active,recoveries,deaths,cases,data)
+
+
 
         data.datasets[0].data = [...cases]
         data.datasets[3].data = [...active]
@@ -166,6 +169,8 @@ class BarGraph extends Component {
         data.datasets[1].data = [...deaths]
         data.labels = [...dates]
         
+        //console.log(data)
+
         this.setState({
             stateName: states[currentState],
             data
